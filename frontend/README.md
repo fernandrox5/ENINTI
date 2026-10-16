@@ -19,3 +19,14 @@ frontend/
 ```
 
 Cada módulo se organiza en `pages/`, `components/` y `services/`.
+
+## Cómo levantarlo
+
+Con el backend corriendo en el puerto 3001:
+
+```
+npm install
+npm run dev
+```
+
+Abre http://localhost:5174/admin/plantas. Vite redirige las llamadas a `/api` hacia el backend.
