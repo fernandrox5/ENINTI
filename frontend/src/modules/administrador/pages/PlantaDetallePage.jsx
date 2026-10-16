@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { listarPlanes, listarSuscripciones, obtenerPlanta } from '../services/plantasService.js';
+import { listarSuscripciones, obtenerPlanta } from '../services/plantasService.js';
 import SuscripcionPanel from '../components/SuscripcionPanel.jsx';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
 import { formatoFecha } from '../../../shared/utils/formato.js';
@@ -9,15 +9,13 @@ export default function PlantaDetallePage() {
   const { id } = useParams();
   const [planta, setPlanta] = useState(null);
   const [suscripciones, setSuscripciones] = useState([]);
-  const [planes, setPlanes] = useState([]);
   const [error, setError] = useState(null);
 
   const cargar = useCallback(() => {
-    return Promise.all([obtenerPlanta(id), listarSuscripciones(id), listarPlanes()])
-      .then(([p, s, pl]) => {
+    return Promise.all([obtenerPlanta(id), listarSuscripciones(id)])
+      .then(([p, s]) => {
         setPlanta(p);
         setSuscripciones(s);
-        setPlanes(pl);
       })
       .catch(setError);
   }, [id]);
@@ -33,9 +31,9 @@ export default function PlantaDetallePage() {
     ['Cliente', `${planta.cliente.nombre} · ${planta.cliente.rut}`],
     ['Dirección', planta.direccion],
     ['Comuna', planta.comuna],
-    ['Potencia', `${planta.potencia_kwp} kWp`],
-    ['Inversor', `${planta.inversor_marca} ${planta.inversor_modelo}`],
-    ['Paneles', `${planta.paneles_cantidad} × ${planta.paneles_modelo}`],
+    ['Potencia', `${planta.potencia_kw} kW`],
+    ['Inversor', planta.inversor],
+    ['Paneles', planta.paneles],
     ['Baterías', planta.baterias ?? 'Sin baterías'],
     ['Fecha de instalación', formatoFecha(planta.fecha_instalacion)],
   ];
@@ -61,7 +59,7 @@ export default function PlantaDetallePage() {
           </dl>
         </article>
 
-        <SuscripcionPanel plantaId={id} suscripciones={suscripciones} planes={planes} onCambio={cargar} />
+        <SuscripcionPanel plantaId={id} suscripciones={suscripciones} onCambio={cargar} />
       </div>
     </section>
   );

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { actualizarPlanta, crearPlanta, listarClientes, obtenerPlanta } from '../services/plantasService.js';
+import {
+  actualizarPlanta, crearPlanta, listarClientes, listarComunas, obtenerPlanta,
+} from '../services/plantasService.js';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
 
 const VACIO = {
-  cliente_id: '',
+  id_cliente: '',
+  id_comuna: '',
   direccion: '',
-  comuna: '',
-  potencia_kwp: '',
-  inversor_marca: '',
-  inversor_modelo: '',
-  paneles_cantidad: '',
-  paneles_modelo: '',
+  potencia_kw: '',
+  inversor: '',
+  paneles: '',
   baterias: '',
   fecha_instalacion: '',
 };
@@ -20,9 +20,9 @@ const VACIO = {
 function aDatosApi(form) {
   return {
     ...form,
-    cliente_id: Number(form.cliente_id),
-    potencia_kwp: Number(form.potencia_kwp),
-    paneles_cantidad: Number(form.paneles_cantidad),
+    id_cliente: Number(form.id_cliente),
+    id_comuna: Number(form.id_comuna),
+    potencia_kw: Number(form.potencia_kw),
     baterias: form.baterias.trim() || null,
   };
 }
@@ -34,14 +34,16 @@ export default function PlantaFormPage() {
 
   const [form, setForm] = useState(VACIO);
   const [clientes, setClientes] = useState([]);
+  const [comunas, setComunas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    Promise.all([listarClientes(), editando ? obtenerPlanta(id) : null])
-      .then(([listaClientes, planta]) => {
+    Promise.all([listarClientes(), listarComunas(), editando ? obtenerPlanta(id) : null])
+      .then(([listaClientes, listaComunas, planta]) => {
         setClientes(listaClientes);
+        setComunas(listaComunas);
         if (planta) {
           setForm(Object.fromEntries(Object.keys(VACIO).map((k) => [k, String(planta[k] ?? '')])));
         }
@@ -60,7 +62,7 @@ export default function PlantaFormPage() {
       const planta = editando
         ? await actualizarPlanta(id, aDatosApi(form))
         : await crearPlanta(aDatosApi(form));
-      navigate(`/admin/plantas/${planta.id}`);
+      navigate(`/admin/plantas/${planta.id_planta}`);
     } catch (err) {
       setError(err);
       setGuardando(false);
@@ -82,52 +84,49 @@ export default function PlantaFormPage() {
           <legend>Cliente y ubicación</legend>
           <label>
             Cliente
-            <select name="cliente_id" value={form.cliente_id} onChange={cambiar} required>
+            <select name="id_cliente" value={form.id_cliente} onChange={cambiar} required>
               <option value="">Selecciona un cliente</option>
               {clientes.map((c) => (
-                <option key={c.id} value={c.id}>{c.nombre} · {c.rut}</option>
+                <option key={c.id_cliente} value={c.id_cliente}>{c.nombre} · {c.rut}</option>
               ))}
             </select>
           </label>
           <label>
+            Comuna
+            <select name="id_comuna" value={form.id_comuna} onChange={cambiar} required>
+              <option value="">Selecciona una comuna</option>
+              {comunas.map((c) => (
+                <option key={c.id_comuna} value={c.id_comuna}>{c.nombre}</option>
+              ))}
+            </select>
+          </label>
+          <label className="ancho-completo">
             Dirección
             <input name="direccion" value={form.direccion} onChange={cambiar} required maxLength={200} />
-          </label>
-          <label>
-            Comuna
-            <input name="comuna" value={form.comuna} onChange={cambiar} required maxLength={80} />
           </label>
         </fieldset>
 
         <fieldset>
           <legend>Ficha técnica</legend>
           <label>
-            Potencia (kWp)
-            <input name="potencia_kwp" type="number" step="0.01" min="0.01" value={form.potencia_kwp} onChange={cambiar} required />
+            Potencia (kW)
+            <input name="potencia_kw" type="number" step="0.01" min="0.01" value={form.potencia_kw} onChange={cambiar} required />
           </label>
           <label>
             Fecha de instalación
             <input name="fecha_instalacion" type="date" value={form.fecha_instalacion} onChange={cambiar} required />
           </label>
           <label>
-            Marca del inversor
-            <input name="inversor_marca" value={form.inversor_marca} onChange={cambiar} required maxLength={80} />
+            Inversor
+            <input name="inversor" value={form.inversor} onChange={cambiar} required maxLength={100} placeholder="Ej.: Huawei SUN2000-3KTL" />
           </label>
           <label>
-            Modelo del inversor
-            <input name="inversor_modelo" value={form.inversor_modelo} onChange={cambiar} required maxLength={80} />
-          </label>
-          <label>
-            Cantidad de paneles
-            <input name="paneles_cantidad" type="number" step="1" min="1" value={form.paneles_cantidad} onChange={cambiar} required />
-          </label>
-          <label>
-            Modelo de los paneles
-            <input name="paneles_modelo" value={form.paneles_modelo} onChange={cambiar} required maxLength={80} />
+            Paneles
+            <input name="paneles" value={form.paneles} onChange={cambiar} required maxLength={100} placeholder="Ej.: 6 × JA Solar 550 W" />
           </label>
           <label className="ancho-completo">
             Baterías <span className="opcional">(opcional)</span>
-            <input name="baterias" value={form.baterias} onChange={cambiar} maxLength={120} placeholder="Ej.: Pylontech US5000 x2" />
+            <input name="baterias" value={form.baterias} onChange={cambiar} maxLength={100} placeholder="Ej.: Pylontech US5000 × 2" />
           </label>
         </fieldset>
 

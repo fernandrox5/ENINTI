@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { listarPlantas } from '../services/plantasService.js';
 import EstadoSuscripcion from '../components/EstadoSuscripcion.jsx';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
+import { formatoPesos } from '../../../shared/utils/formato.js';
 
 export default function PlantasPage() {
   const [plantas, setPlantas] = useState([]);
@@ -63,20 +64,22 @@ export default function PlantasPage() {
               <th>Dirección</th>
               <th>Comuna</th>
               <th>Potencia</th>
-              <th>Plan</th>
+              <th>Cuota mensual</th>
               <th>Estado</th>
             </tr>
           </thead>
           <tbody>
             {filtradas.map((p) => (
-              <tr key={p.id}>
+              <tr key={p.id_planta}>
                 <td data-label="Cliente">
-                  <Link to={`/admin/plantas/${p.id}`}>{p.cliente.nombre}</Link>
+                  <Link to={`/admin/plantas/${p.id_planta}`}>{p.cliente.nombre}</Link>
                 </td>
                 <td data-label="Dirección">{p.direccion}</td>
                 <td data-label="Comuna">{p.comuna}</td>
-                <td data-label="Potencia">{p.potencia_kwp} kWp</td>
-                <td data-label="Plan">{p.suscripcion?.plan.nombre ?? '—'}</td>
+                <td data-label="Potencia">{p.potencia_kw} kW</td>
+                <td data-label="Cuota mensual">
+                  {p.suscripcion ? formatoPesos(p.suscripcion.monto_mensual) : '—'}
+                </td>
                 <td data-label="Estado"><EstadoSuscripcion estado={p.suscripcion?.estado} /></td>
               </tr>
             ))}

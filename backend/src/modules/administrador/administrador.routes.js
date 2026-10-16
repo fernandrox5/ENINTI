@@ -9,6 +9,7 @@ const router = Router();
 router.use(autenticar, permitirRoles('administrador'));
 
 router.get('/clientes', clientes.listar);
+router.get('/comunas', clientes.listarComunas);
 
 // Plantas y ficha técnica (HU-03)
 router.get('/plantas', plantas.listar);
@@ -20,6 +21,5 @@ router.put('/plantas/:id', plantas.actualizar);
 router.get('/plantas/:id/suscripciones', plantas.listarSuscripciones);
 router.post('/plantas/:id/suscripciones', plantas.crearSuscripcion);
 router.patch('/suscripciones/:id', suscripciones.actualizar);
-router.get('/planes', suscripciones.listarPlanes);
 
 export default router;

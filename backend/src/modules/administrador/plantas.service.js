@@ -3,14 +3,12 @@ import { HttpError } from '../../shared/utils/httpError.js';
 
 // Campos de la ficha técnica y el tipo que se valida para cada uno
 const CAMPOS = {
-  cliente_id: 'entero',
+  id_cliente: 'entero',
+  id_comuna: 'entero',
   direccion: 'texto',
-  comuna: 'texto',
-  potencia_kwp: 'decimal',
-  inversor_marca: 'texto',
-  inversor_modelo: 'texto',
-  paneles_cantidad: 'entero',
-  paneles_modelo: 'texto',
+  potencia_kw: 'decimal',
+  inversor: 'texto',
+  paneles: 'texto',
   baterias: 'texto_opcional',
   fecha_instalacion: 'fecha',
 };
@@ -44,34 +42,36 @@ function validar(datos, { parcial }) {
 
 const SELECT_PLANTA = `
   SELECT p.*,
-         json_build_object('id', c.id, 'rut', c.rut, 'nombre', c.nombre) AS cliente,
-         CASE WHEN s.id IS NULL THEN NULL ELSE json_build_object(
-           'id', s.id, 'estado', s.estado, 'fecha_inicio', s.fecha_inicio,
-           'plan', json_build_object('id', pn.id, 'nombre', pn.nombre, 'precio_mensual', pn.precio_mensual)
+         co.nombre AS comuna,
+         json_build_object('id_cliente', c.id_cliente, 'rut', c.rut, 'nombre', c.nombre) AS cliente,
+         CASE WHEN s.id_suscripcion IS NULL THEN NULL ELSE json_build_object(
+           'id_suscripcion', s.id_suscripcion, 'estado', s.estado, 'fecha_inicio', s.fecha_inicio,
+           'monto_mensual', s.monto_mensual, 'dia_cobro', s.dia_cobro,
+           'mantenciones_anuales', s.mantenciones_anuales
          ) END AS suscripcion
-  FROM plantas p
-  JOIN clientes c ON c.id = p.cliente_id
-  LEFT JOIN suscripciones s ON s.planta_id = p.id AND s.estado <> 'cancelada'
-  LEFT JOIN planes pn ON pn.id = s.plan_id`;
+  FROM planta p
+  JOIN cliente c ON c.id_cliente = p.id_cliente
+  JOIN comuna co ON co.id_comuna = p.id_comuna
+  LEFT JOIN suscripcion s ON s.id_planta = p.id_planta AND s.estado <> 'cancelada'`;
 
-export async function listar({ cliente_id, comuna }) {
+export async function listar({ id_cliente, id_comuna }) {
   const condiciones = [];
   const params = [];
-  if (cliente_id) {
-    params.push(cliente_id);
-    condiciones.push(`p.cliente_id = $${params.length}`);
+  if (id_cliente) {
+    params.push(id_cliente);
+    condiciones.push(`p.id_cliente = $${params.length}`);
   }
-  if (comuna) {
-    params.push(comuna);
-    condiciones.push(`p.comuna ILIKE $${params.length}`);
+  if (id_comuna) {
+    params.push(id_comuna);
+    condiciones.push(`p.id_comuna = $${params.length}`);
   }
   const where = condiciones.length ? `WHERE ${condiciones.join(' AND ')}` : '';
-  const { rows } = await query(`${SELECT_PLANTA} ${where} ORDER BY p.id`, params);
+  const { rows } = await query(`${SELECT_PLANTA} ${where} ORDER BY co.nombre, p.direccion`, params);
   return rows;
 }
 
 export async function obtener(id) {
-  const { rows } = await query(`${SELECT_PLANTA} WHERE p.id = $1`, [id]);
+  const { rows } = await query(`${SELECT_PLANTA} WHERE p.id_planta = $1`, [id]);
   if (!rows.length) throw new HttpError(404, 'Planta no encontrada');
   return rows[0];
 }
@@ -80,21 +80,21 @@ export async function crear(datos) {
   const planta = validar(datos, { parcial: false });
   const campos = Object.keys(planta);
   const { rows } = await query(
-    `INSERT INTO plantas (${campos.join(', ')})
+    `INSERT INTO planta (${campos.join(', ')})
      VALUES (${campos.map((_, i) => `$${i + 1}`).join(', ')})
-     RETURNING id`,
+     RETURNING id_planta`,
     Object.values(planta),
   );
-  return obtener(rows[0].id);
+  return obtener(rows[0].id_planta);
 }
 
 export async function actualizar(id, datos) {
   const cambios = validar(datos, { parcial: true });
   const campos = Object.keys(cambios);
   const { rowCount } = await query(
-    `UPDATE plantas
-     SET ${campos.map((c, i) => `${c} = $${i + 2}`).join(', ')}, updated_at = now()
-     WHERE id = $1`,
+    `UPDATE planta
+     SET ${campos.map((c, i) => `${c} = $${i + 2}`).join(', ')}
+     WHERE id_planta = $1`,
     [id, ...Object.values(cambios)],
   );
   if (!rowCount) throw new HttpError(404, 'Planta no encontrada');

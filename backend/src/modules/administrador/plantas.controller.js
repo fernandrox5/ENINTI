@@ -9,10 +9,10 @@ export function parseId(valor) {
 }
 
 export async function listar(req, res) {
-  const { cliente_id, comuna } = req.query;
+  const { id_cliente, id_comuna } = req.query;
   res.json(await plantas.listar({
-    cliente_id: cliente_id ? parseId(cliente_id) : undefined,
-    comuna: comuna?.trim() || undefined,
+    id_cliente: id_cliente ? parseId(id_cliente) : undefined,
+    id_comuna: id_comuna ? parseId(id_comuna) : undefined,
   }));
 }
 
