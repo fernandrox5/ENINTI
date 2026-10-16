@@ -23,6 +23,17 @@ Cada carpeta tiene su propio README con el detalle de su contenido.
 | Base de datos | PostgreSQL |
 | Pagos | Webpay Plus o Flow (sandbox) |
 
+## Desarrollo
+
+Desde la raíz del proyecto:
+
+```
+npm run install:all   # solo la primera vez
+npm run dev           # levanta backend (3001) y frontend (5174) juntos
+```
+
+Abre http://localhost:5174/admin/plantas. Para detener ambos: Ctrl + C.
+
 ## Equipos
 
 | Equipo | Integrantes | Módulo |
