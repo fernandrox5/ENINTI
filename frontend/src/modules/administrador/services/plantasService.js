@@ -11,5 +11,5 @@ export const crearSuscripcion = (plantaId, datos) =>
 export const actualizarSuscripcion = (id, datos) =>
   api(`/admin/suscripciones/${id}`, { method: 'PATCH', body: datos });
 
-export const listarPlanes = () => api('/admin/planes');
 export const listarClientes = () => api('/admin/clientes');
+export const listarComunas = () => api('/admin/comunas');
