@@ -32,9 +32,36 @@ npm run dev
 
 `db:init` ejecuta en orden los `.sql` de `database/schema` y `database/seeds`; se puede correr más de una vez.
 
-## Endpoints disponibles
+## Usuarios de prueba
 
-Todos bajo `/api/admin`, protegidos con JWT y rol `administrador`. Mientras no exista la autenticación (T-09), `AUTH_BYPASS=true` en `.env` deja pasar las peticiones como administrador.
+Todos con la contraseña `Eninti2026`:
+
+| Correo | Rol |
+|---|---|
+| admin@eninti.test | administrador |
+| pedro.ramirez@eninti.test | trabajador |
+| maria.gonzalez@ejemplo.cl | cliente (2 plantas) |
+| luis.perez@ejemplo.cl | cliente (1 planta, morosa) |
+
+Carmen Soto (RUT `33.333.333-3`) es cliente pero aún no tiene cuenta: sirve para probar el registro.
+
+## Autenticación (`/api/auth`)
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/registro` | Registro del cliente con `rut`, `email` y `password` (mínimo 8). Solo para RUT que ya son clientes de ENINTI |
+| POST | `/login` | `email` y `password`. Devuelve `{ token, usuario }`; el token dura 8 horas |
+| GET | `/me` | Usuario de la sesión actual (requiere token) |
+
+Las demás rutas reciben el token en la cabecera `Authorization: Bearer <token>`. Las contraseñas se guardan con scrypt (módulo `crypto` de Node). Con `AUTH_BYPASS=true` en `.env`, una petición **sin** token pasa como administrador (solo desarrollo).
+
+## Cliente (`/api/cliente`, rol `cliente`)
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/plantas` | Plantas del cliente que inició sesión, con el estado de su suscripción |
+
+## Administrador (`/api/admin`, rol `administrador`)
 
 | Método | Ruta | Descripción |
 |---|---|---|

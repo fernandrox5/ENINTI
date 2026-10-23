@@ -196,3 +196,53 @@ input:focus, select:focus, .boton:focus-visible, a:focus-visible {
 .mensaje-error ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
 
 .historial { margin: 0; padding-left: 1.2rem; color: var(--color-texto-suave); }
+
+/* Pantallas que usa el cliente: texto base de 14 pt (RNF-01) */
+.vista-cliente { font-size: 1.1667rem; }
+.vista-cliente h1 { font-size: 1.7rem; }
+
+.ayuda { color: var(--color-texto-suave); margin: 0.25rem 0 1.25rem; }
+.cargando-sesion { padding: 2rem 1rem; text-align: center; }
+
+.topbar .boton-salir {
+  margin-left: auto;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #fff;
+  border-radius: var(--radio);
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.topbar .boton-salir:hover { background: rgba(255, 255, 255, 0.15); }
+.topbar .boton-salir:focus-visible { outline: 3px solid #7fb8dc; outline-offset: 1px; }
+.topbar a, .topbar .boton-salir { white-space: nowrap; }
+
+@media (max-width: 480px) {
+  .topbar { gap: 0.9rem; padding: 0.75rem 1rem; font-size: 1rem; }
+}
+
+/* Inicio de sesión y registro */
+.pantalla-acceso {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem 1rem;
+}
+.tarjeta.acceso { width: 100%; max-width: 440px; padding: 1.75rem; }
+.acceso h1 { margin-bottom: 0.5rem; }
+.marca-acceso { margin: 0 0 0.5rem; font-weight: 700; letter-spacing: 0.05em; color: var(--color-primario); }
+.acceso .formulario-simple { margin-top: 1rem; }
+.acceso .boton { width: 100%; }
+.pie-acceso { margin: 1.25rem 0 0; text-align: center; }
+
+/* Plantas del cliente */
+.lista-plantas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+.lista-plantas h2 { font-size: 1.15em; }

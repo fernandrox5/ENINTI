@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listarPlantas } from '../services/plantasService.js';
-import EstadoSuscripcion from '../components/EstadoSuscripcion.jsx';
+import EstadoSuscripcion from '../../../shared/components/EstadoSuscripcion.jsx';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
 import { formatoPesos } from '../../../shared/utils/formato.js';
 

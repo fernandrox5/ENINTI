@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import BotonSalir from '../components/BotonSalir.jsx';
 
 export default function AdminLayout() {
   return (
@@ -8,6 +9,7 @@ export default function AdminLayout() {
         <nav>
           <NavLink to="/admin/plantas">Plantas</NavLink>
         </nav>
+        <BotonSalir />
       </header>
       <main className="contenido">
         <Outlet />

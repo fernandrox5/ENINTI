@@ -32,7 +32,7 @@ npm run install:all   # solo la primera vez
 npm run dev           # levanta backend (3001) y frontend (5174) juntos
 ```
 
-Abre http://localhost:5174/admin/plantas. Para detener ambos: Ctrl + C.
+Abre http://localhost:5174 e inicia sesión con un usuario de prueba (ver `backend/README.md`). Para detener ambos: Ctrl + C.
 
 ## Equipos
 

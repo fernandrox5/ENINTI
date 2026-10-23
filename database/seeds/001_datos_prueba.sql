@@ -1,6 +1,6 @@
 -- Datos de prueba ficticios (RNF-04): ningún dato corresponde a personas reales.
 -- Solo se cargan si la base está vacía, así el script se puede ejecutar varias veces.
--- password_hash es provisional hasta que el Equipo 2 entregue la autenticación (T-09).
+-- Todos los usuarios de prueba usan la contraseña: Eninti2026
 
 DO $$
 BEGIN
@@ -13,10 +13,10 @@ BEGIN
     ('San Pedro de Atacama'), ('Sierra Gorda'), ('Taltal'), ('Tocopilla');
 
   INSERT INTO usuario (nombre, email, password_hash, rol) VALUES
-    ('Administración ENINTI', 'admin@eninti.test',          'pendiente-T09', 'administrador'),
-    ('Pedro Ramírez Castro',  'pedro.ramirez@eninti.test',  'pendiente-T09', 'trabajador'),
-    ('María González Rojas',  'maria.gonzalez@ejemplo.cl',  'pendiente-T09', 'cliente'),
-    ('Luis Pérez Araya',      'luis.perez@ejemplo.cl',      'pendiente-T09', 'cliente');
+    ('Administración ENINTI', 'admin@eninti.test',          'scrypt$53b4f6f474a4f114979bf30142866751$1feac05a750c5b72b8e18605a84a9ae931aaafaaaa7c960a8e92fdf214c0a5b899ccc4acfb82314cc6a7265120086e47b031fbc6660ce3fdd86aa831bf47b507', 'administrador'),
+    ('Pedro Ramírez Castro',  'pedro.ramirez@eninti.test',  'scrypt$24df03d0087dd5ac0efbf9e3065755e4$dddd3bf699d930bc3d155c742956e42db7b44a5f9495ac91144973375a1686f24d5e6317a4f609e035d065c93a7d17b7c80242d729e9417c7d0cea40c47cdace', 'trabajador'),
+    ('María González Rojas',  'maria.gonzalez@ejemplo.cl',  'scrypt$e2d946ed2810dc284424cb2f5897e7e8$c883719b73d23f78008852a2b0d2702b5a5b27a07f4644d627e9443fd0fa20362df28c898062c34efd24aba71aa4a261ded57d79af78089981fb8b26f38173e0', 'cliente'),
+    ('Luis Pérez Araya',      'luis.perez@ejemplo.cl',      'scrypt$263f0f35abfe00cfed6a10cba89d79af$d288c0c79a332fc7dfbdd755ca860d859476301c1fbfa13e1bfbfa7549a8783b6da96af44e204586c0eb08e00300d52452236103e5920ebe4e0079e5dd6d48f3', 'cliente');
 
   -- Carmen aún no se registra en la plataforma: cliente sin usuario
   INSERT INTO cliente (id_usuario, rut, nombre, telefono, direccion, id_comuna)

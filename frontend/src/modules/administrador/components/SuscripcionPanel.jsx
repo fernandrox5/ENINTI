@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { actualizarSuscripcion, crearSuscripcion } from '../services/plantasService.js';
-import EstadoSuscripcion from './EstadoSuscripcion.jsx';
+import EstadoSuscripcion from '../../../shared/components/EstadoSuscripcion.jsx';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
 import { formatoFecha, formatoPesos, hoy } from '../../../shared/utils/formato.js';
 

@@ -29,4 +29,4 @@ npm install
 npm run dev
 ```
 
-Abre http://localhost:5174/admin/plantas. Vite redirige las llamadas a `/api` hacia el backend.
+Abre http://localhost:5174 e inicia sesión (usuarios de prueba en `backend/README.md`). Vite redirige las llamadas a `/api` hacia el backend.
