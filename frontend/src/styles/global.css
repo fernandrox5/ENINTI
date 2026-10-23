@@ -217,6 +217,37 @@ input:focus, select:focus, .boton:focus-visible, a:focus-visible {
 .topbar .boton-salir:hover { background: rgba(255, 255, 255, 0.15); }
 .topbar .boton-salir:focus-visible { outline: 3px solid #7fb8dc; outline-offset: 1px; }
 .topbar a, .topbar .boton-salir { white-space: nowrap; }
+.topbar nav { display: flex; gap: 1.25rem; min-width: 0; overflow-x: auto; }
+
+/* Acciones dentro de una fila de tabla y botones con aspecto de enlace */
+.acciones-fila { display: inline-flex; gap: 1rem; align-items: center; }
+.enlace {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-primario);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.enlace:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Lista compacta (plantas de un cliente) */
+.lista-simple { list-style: none; margin: 0; padding: 0; }
+.lista-simple li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--color-borde);
+}
+.lista-simple li:first-child { border-top: none; padding-top: 0; }
+.lista-simple li span:not(.etiqueta) { color: var(--color-texto-suave); }
+
+.tarjeta .encabezado { margin-bottom: 1rem; }
+.tarjeta .encabezado h2 { margin: 0; }
+.ver-ficha { margin-top: 1.25rem; }
 
 @media (max-width: 480px) {
   .topbar { gap: 0.9rem; padding: 0.75rem 1rem; font-size: 1rem; }

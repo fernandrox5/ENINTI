@@ -1,12 +1,6 @@
 import * as plantas from './plantas.service.js';
 import * as suscripciones from './suscripciones.service.js';
-import { HttpError } from '../../shared/utils/httpError.js';
-
-export function parseId(valor) {
-  const id = Number(valor);
-  if (!Number.isInteger(id) || id <= 0) throw new HttpError(400, 'Id inválido');
-  return id;
-}
+import { parseId } from '../../shared/utils/parametros.js';
 
 export async function listar(req, res) {
   const { id_cliente, id_comuna } = req.query;

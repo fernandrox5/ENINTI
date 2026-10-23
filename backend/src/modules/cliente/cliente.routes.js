@@ -7,5 +7,6 @@ const router = Router();
 router.use(autenticar, permitirRoles('cliente'));
 
 router.get('/plantas', cliente.misPlantas);
+router.get('/plantas/:id', cliente.fichaPlanta);
 
 export default router;

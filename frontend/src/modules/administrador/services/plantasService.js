@@ -10,6 +10,3 @@ export const crearSuscripcion = (plantaId, datos) =>
   api(`/admin/plantas/${plantaId}/suscripciones`, { method: 'POST', body: datos });
 export const actualizarSuscripcion = (id, datos) =>
   api(`/admin/suscripciones/${id}`, { method: 'PATCH', body: datos });
-
-export const listarClientes = () => api('/admin/clientes');
-export const listarComunas = () => api('/admin/comunas');

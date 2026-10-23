@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  actualizarPlanta, crearPlanta, listarClientes, listarComunas, obtenerPlanta,
-} from '../services/plantasService.js';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { actualizarPlanta, crearPlanta, obtenerPlanta } from '../services/plantasService.js';
+import { listarClientes, listarComunas } from '../services/clientesService.js';
 import Mensaje from '../../../shared/components/Mensaje.jsx';
 
 const VACIO = {
@@ -31,8 +30,10 @@ export default function PlantaFormPage() {
   const { id } = useParams();
   const editando = Boolean(id);
   const navigate = useNavigate();
+  // Desde la ficha de un cliente se llega con ?cliente=<id> para dejarlo seleccionado
+  const clienteInicial = useSearchParams()[0].get('cliente') ?? '';
 
-  const [form, setForm] = useState(VACIO);
+  const [form, setForm] = useState({ ...VACIO, id_cliente: editando ? '' : clienteInicial });
   const [clientes, setClientes] = useState([]);
   const [comunas, setComunas] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -131,7 +132,12 @@ export default function PlantaFormPage() {
         </fieldset>
 
         <div className="acciones">
-          <Link className="boton secundario" to={editando ? `/admin/plantas/${id}` : '/admin/plantas'}>Cancelar</Link>
+          <Link
+            className="boton secundario"
+            to={editando ? `/admin/plantas/${id}` : clienteInicial ? `/admin/clientes/${clienteInicial}` : '/admin/plantas'}
+          >
+            Cancelar
+          </Link>
           <button type="submit" className="boton" disabled={guardando}>
             {guardando ? 'Guardando…' : 'Guardar'}
           </button>

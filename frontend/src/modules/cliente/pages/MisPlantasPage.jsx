@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { listarMisPlantas } from '../services/clienteService.js';
 import { useAuth } from '../../../shared/context/AuthContext.jsx';
 import EstadoSuscripcion from '../../../shared/components/EstadoSuscripcion.jsx';
@@ -36,6 +37,9 @@ export default function MisPlantasPage() {
               <div><dt>Suscripción</dt><dd><EstadoSuscripcion estado={p.estado_suscripcion} /></dd></div>
               {p.monto_mensual && <div><dt>Cuota mensual</dt><dd>{formatoPesos(p.monto_mensual)}</dd></div>}
             </dl>
+            <Link className="boton secundario ver-ficha" to={`/cliente/plantas/${p.id_planta}`}>
+              Ver ficha técnica
+            </Link>
           </li>
         ))}
       </ul>

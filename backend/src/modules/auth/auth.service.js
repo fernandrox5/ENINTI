@@ -3,10 +3,9 @@ import { pool, query } from '../../config/db.js';
 import { HttpError } from '../../shared/utils/httpError.js';
 import { hashPassword, verificarPassword } from '../../shared/utils/password.js';
 import { normalizarRut } from '../../shared/utils/rut.js';
+import { EMAIL_VALIDO, LARGO_MINIMO_PASSWORD } from '../../shared/utils/validacion.js';
 
 const DURACION_SESION = '8h';
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const LARGO_MINIMO_PASSWORD = 8;
 
 function emitirToken(usuario) {
   if (!process.env.JWT_SECRET) throw new Error('Falta JWT_SECRET en el .env');
@@ -34,7 +33,7 @@ export async function registrarCliente({ rut, email, password }) {
   const errores = [];
   const rutNormalizado = normalizarRut(rut);
   if (!rutNormalizado) errores.push('El RUT no es válido');
-  if (typeof email !== 'string' || !EMAIL.test(email.trim())) errores.push('El correo no es válido');
+  if (typeof email !== 'string' || !EMAIL_VALIDO.test(email.trim())) errores.push('El correo no es válido');
   if (typeof password !== 'string' || password.length < LARGO_MINIMO_PASSWORD) {
     errores.push(`La contraseña debe tener al menos ${LARGO_MINIMO_PASSWORD} caracteres`);
   }

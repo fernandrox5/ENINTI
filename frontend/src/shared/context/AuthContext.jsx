@@ -7,6 +7,7 @@ const AuthContext = createContext(null);
 // Pantalla de inicio de cada perfil después de iniciar sesión
 export const INICIO_POR_ROL = {
   cliente: '/cliente',
+  trabajador: '/trabajador',
   administrador: '/admin/plantas',
 };
 

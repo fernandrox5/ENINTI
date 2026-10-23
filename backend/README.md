@@ -60,6 +60,7 @@ Las demás rutas reciben el token en la cabecera `Authorization: Bearer <token>`
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/plantas` | Plantas del cliente que inició sesión, con el estado de su suscripción |
+| GET | `/plantas/:id` | Ficha técnica y suscripción de una de sus plantas (404 si es de otro cliente) |
 
 ## Administrador (`/api/admin`, rol `administrador`)
 
@@ -72,5 +73,12 @@ Las demás rutas reciben el token en la cabecera `Authorization: Bearer <token>`
 | GET | `/plantas/:id/suscripciones` | Historial de suscripciones de la planta |
 | POST | `/plantas/:id/suscripciones` | Crear la suscripción mensual (opcionales `monto_mensual`, por defecto $15.000; `fecha_inicio`; `dia_cobro` 1–28) |
 | PATCH | `/suscripciones/:id` | Cambiar `monto_mensual`, `dia_cobro` o `estado` (`al_dia`, `morosa`, `cancelada`) |
-| GET | `/clientes` | Listado básico de clientes para selectores |
+| GET | `/clientes` | Clientes con comuna, total de plantas y si tienen cuenta |
+| POST | `/clientes` | Crear cliente: `rut`, `nombre`; opcionales `telefono`, `direccion`, `id_comuna` |
+| GET | `/clientes/:id` | Datos del cliente y sus plantas |
+| PUT | `/clientes/:id` | Editar datos del cliente (parcial) |
+| GET | `/trabajadores` | Cuentas de trabajadores |
+| POST | `/trabajadores` | Crear trabajador: `nombre`, `email`, `password` (mínimo 8) |
+| GET | `/trabajadores/:id` | Datos de un trabajador |
+| PUT | `/trabajadores/:id` | Editar `nombre`, `email`, `password` o `activo`; desactivado no puede iniciar sesión |
 | GET | `/comunas` | Comunas disponibles |
