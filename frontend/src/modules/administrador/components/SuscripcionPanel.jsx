@@ -31,7 +31,6 @@ export default function SuscripcionPanel({ plantaId, suscripciones, onCambio }) 
   const crear = (e) => {
     e.preventDefault();
     ejecutar(() => crearSuscripcion(plantaId, {
-      monto_mensual: Number(monto),
       fecha_inicio: fechaInicio,
       dia_cobro: Number(diaCobro),
     }));
@@ -100,11 +99,7 @@ export default function SuscripcionPanel({ plantaId, suscripciones, onCambio }) 
         </>
       ) : (
         <form className="formulario-simple" onSubmit={crear}>
-          <p>Esta planta no tiene una suscripción vigente.</p>
-          <label>
-            Cuota mensual
-            {campoMonto}
-          </label>
+          <p>Esta planta no tiene una suscripción vigente. Se cobrará la cuota mensual vigente.</p>
           <label>
             Fecha de inicio
             <input type="date" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} required />
@@ -113,7 +108,7 @@ export default function SuscripcionPanel({ plantaId, suscripciones, onCambio }) 
             Día de cobro
             <input type="number" min="1" max="28" step="1" value={diaCobro} onChange={(e) => setDiaCobro(e.target.value)} required />
           </label>
-          <button type="submit" className="boton" disabled={enviando || !monto}>Crear suscripción</button>
+          <button type="submit" className="boton" disabled={enviando}>Crear suscripción</button>
         </form>
       )}
 

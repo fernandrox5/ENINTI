@@ -19,8 +19,11 @@ export async function listarPorPlanta(idPlanta) {
   return rows;
 }
 
+// Sin monto_mensual se aplica la cuota vigente definida en la base de datos ($15.000)
 export async function crear(idPlanta, { monto_mensual, fecha_inicio, dia_cobro }) {
-  if (!esMonto(monto_mensual)) throw new HttpError(400, 'monto_mensual debe ser un entero mayor a 0');
+  if (monto_mensual !== undefined && !esMonto(monto_mensual)) {
+    throw new HttpError(400, 'monto_mensual debe ser un entero mayor a 0');
+  }
   if (dia_cobro !== undefined && !esDiaCobro(dia_cobro)) {
     throw new HttpError(400, 'dia_cobro debe estar entre 1 y 28');
   }
@@ -31,12 +34,16 @@ export async function crear(idPlanta, { monto_mensual, fecha_inicio, dia_cobro }
   const { rows: planta } = await query('SELECT 1 FROM planta WHERE id_planta = $1', [idPlanta]);
   if (!planta.length) throw new HttpError(404, 'Planta no encontrada');
 
+  // Solo se envían las columnas indicadas; las demás toman su valor por defecto
+  const valores = { id_planta: idPlanta, monto_mensual, fecha_inicio, dia_cobro };
+  const campos = Object.keys(valores).filter((c) => valores[c] !== undefined);
+
   try {
     const { rows } = await query(
-      `INSERT INTO suscripcion (id_planta, monto_mensual, fecha_inicio, dia_cobro)
-       VALUES ($1, $2, COALESCE($3::date, CURRENT_DATE), COALESCE($4::smallint, 1))
+      `INSERT INTO suscripcion (${campos.join(', ')})
+       VALUES (${campos.map((_, i) => `$${i + 1}`).join(', ')})
        RETURNING *`,
-      [idPlanta, monto_mensual, fecha_inicio ?? null, dia_cobro ?? null],
+      campos.map((c) => valores[c]),
     );
     return rows[0];
   } catch (err) {

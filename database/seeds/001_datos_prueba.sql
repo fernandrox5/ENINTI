@@ -41,16 +41,16 @@ BEGIN
   JOIN cliente cl ON cl.rut = p.rut
   JOIN comuna co ON co.nombre = p.comuna;
 
-  -- Montos de ejemplo: reemplazar por la cuota real de ENINTI.
+  -- Todas con la cuota vigente por defecto ($15.000).
   -- La planta de Quillagua queda sin suscripción para probar el alta.
-  INSERT INTO suscripcion (id_planta, monto_mensual, fecha_inicio, dia_cobro, estado)
-  SELECT pl.id_planta, s.monto, s.inicio::date, s.dia, s.estado
+  INSERT INTO suscripcion (id_planta, fecha_inicio, dia_cobro, estado)
+  SELECT pl.id_planta, s.inicio::date, s.dia, s.estado
   FROM (VALUES
-    ('Av. Granaderos 1234',  20000, '2023-04-01', 5, 'al_dia'),
-    ('Parcela 12, Ayquina',  20000, '2024-02-01', 5, 'al_dia'),
-    ('Calle Caracoles 45',   18000, '2022-12-01', 5, 'morosa'),
-    ('Pasaje Los Aromos 89', 20000, '2023-09-01', 5, 'al_dia')
-  ) AS s(direccion, monto, inicio, dia, estado)
+    ('Av. Granaderos 1234',  '2023-04-01', 5, 'al_dia'),
+    ('Parcela 12, Ayquina',  '2024-02-01', 5, 'al_dia'),
+    ('Calle Caracoles 45',   '2022-12-01', 5, 'morosa'),
+    ('Pasaje Los Aromos 89', '2023-09-01', 5, 'al_dia')
+  ) AS s(direccion, inicio, dia, estado)
   JOIN planta pl ON pl.direccion = s.direccion;
 
   -- Cuotas de agosto a octubre 2026; Calle Caracoles adeuda septiembre y octubre

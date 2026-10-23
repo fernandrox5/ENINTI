@@ -43,7 +43,7 @@ Todos bajo `/api/admin`, protegidos con JWT y rol `administrador`. Mientras no e
 | GET | `/plantas/:id` | Ficha técnica, cliente y suscripción vigente |
 | PUT | `/plantas/:id` | Editar campos de la ficha (parcial) |
 | GET | `/plantas/:id/suscripciones` | Historial de suscripciones de la planta |
-| POST | `/plantas/:id/suscripciones` | Crear la suscripción mensual (`monto_mensual`; opcionales `fecha_inicio` y `dia_cobro` 1–28) |
+| POST | `/plantas/:id/suscripciones` | Crear la suscripción mensual (opcionales `monto_mensual`, por defecto $15.000; `fecha_inicio`; `dia_cobro` 1–28) |
 | PATCH | `/suscripciones/:id` | Cambiar `monto_mensual`, `dia_cobro` o `estado` (`al_dia`, `morosa`, `cancelada`) |
 | GET | `/clientes` | Listado básico de clientes para selectores |
 | GET | `/comunas` | Comunas disponibles |

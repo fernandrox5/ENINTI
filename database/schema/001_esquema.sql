@@ -55,7 +55,7 @@ CREATE INDEX IF NOT EXISTS idx_planta_comuna  ON planta(id_comuna);
 CREATE TABLE IF NOT EXISTS suscripcion (
     id_suscripcion     SERIAL       PRIMARY KEY,
     id_planta          INTEGER      NOT NULL REFERENCES planta(id_planta) ON DELETE RESTRICT,
-    monto_mensual      INTEGER      NOT NULL CHECK (monto_mensual > 0), -- CLP
+    monto_mensual      INTEGER      NOT NULL DEFAULT 15000 CHECK (monto_mensual > 0), -- CLP, cuota vigente de ENINTI
     fecha_inicio       DATE         NOT NULL DEFAULT CURRENT_DATE,
     dia_cobro          SMALLINT     NOT NULL DEFAULT 1 CHECK (dia_cobro BETWEEN 1 AND 28),
     -- Mantenciones preventivas incluidas por año (HU-04 las programa a partir de este valor)
