@@ -4,3 +4,6 @@ build/
 .env
 *.log
 .DS_Store
+
+# Planificación del equipo: se comparte fuera del repositorio
+docs/planificacion/*.xlsx
